@@ -1,0 +1,414 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Marché Sûr</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Concept : place de marché à séquestre. Bandeau vert profond, statuts ambre pour l'argent bloqué, cartes sobres. */
+:root{
+  --bg:#F1F5F4; --surface:#FFFFFF; --ink:#10242B; --muted:#4F646B; --line:#D3DEDC;
+  --brand:#0B6B4F; --brand-ink:#FFFFFF; --brand-soft:#DDF0E8;
+  --hold:#8A5A00; --hold-bg:#FBEFD5; --ok:#0B6B4F; --ok-bg:#DDF0E8;
+  --bad:#A8231B; --bad-bg:#FBE4E1; --info:#1F4E79; --info-bg:#E1ECF7;
+  --t1:#D9E8E2; --t2:#E8E1D2; --t3:#DCE3EE; --t4:#EADDDD;
+  --font-head:'Space Grotesk','Segoe UI',system-ui,sans-serif;
+  --font-body:'Inter','Segoe UI',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1A1E; --surface:#15262B; --ink:#E5EEED; --muted:#9BB0B4; --line:#27393E;
+  --brand:#3DCB9B; --brand-ink:#05261B; --brand-soft:#133B2E;
+  --hold:#F2C063; --hold-bg:#3A2E12; --ok:#3DCB9B; --ok-bg:#133B2E;
+  --bad:#FF9188; --bad-bg:#40201D; --info:#8CB9E6; --info-bg:#172F45;
+  --t1:#1B3A32; --t2:#3A3322; --t3:#1D2E45; --t4:#3F2626; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1A1E; --surface:#15262B; --ink:#E5EEED; --muted:#9BB0B4; --line:#27393E;
+  --brand:#3DCB9B; --brand-ink:#05261B; --brand-soft:#133B2E;
+  --hold:#F2C063; --hold-bg:#3A2E12; --ok:#3DCB9B; --ok-bg:#133B2E;
+  --bad:#FF9188; --bad-bg:#40201D; --info:#8CB9E6; --info-bg:#172F45;
+  --t1:#1B3A32; --t2:#3A3322; --t3:#1D2E45; --t4:#3F2626; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--font-body);min-height:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:30}
+h1,h2,h3{font-family:var(--font-head);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:1.7rem} h2{font-size:1.25rem} h3{font-size:1.05rem}
+p{margin:0}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.bar{display:grid;grid-template-columns:1fr auto;gap:8px 16px;align-items:center;padding-block:10px}
+.brand{font-family:var(--font-head);font-weight:700;font-size:1.2rem;color:var(--brand);display:flex;align-items:center;gap:8px;text-decoration:none}
+.brand svg{width:26px;height:26px}
+#nav{grid-column:1/-1;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+#nav button{background:none;border:0;color:var(--muted);font:500 .92rem var(--font-body);padding:8px 12px;border-radius:8px;white-space:nowrap;cursor:pointer}
+#nav button[aria-current="page"]{background:var(--brand-soft);color:var(--brand)}
+#auth{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+@media(min-width:860px){.bar{grid-template-columns:auto 1fr auto}#nav{grid-column:auto;justify-content:center}}
+.btn{font:600 .92rem var(--font-body);border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:var(--brand-ink);padding:10px 16px;cursor:pointer;min-height:42px}
+.btn.ghost{background:transparent;color:var(--brand)}
+.btn.warn{background:var(--hold-bg);border-color:var(--hold);color:var(--hold)}
+.btn.danger{background:transparent;border-color:var(--bad);color:var(--bad)}
+.btn.sm{padding:6px 12px;min-height:34px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.demo{background:var(--info-bg);color:var(--info);font-size:.82rem;padding:8px 0}
+main{padding-block:22px 110px;display:grid;gap:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.hero{display:grid;gap:14px}
+.hero p{color:var(--muted);max-width:62ch}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;list-style:none;padding:0;margin:0}
+.flow li{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:4px;background:var(--bg)}
+.flow b{font-family:var(--font-head);color:var(--brand)}
+.flow span{color:var(--muted);font-size:.88rem}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:42px;width:100%}
+.tools input{flex:1 1 220px;width:auto}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:6px 12px;font:500 .85rem var(--font-body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.prod{display:grid;gap:10px;align-content:start;padding:0;overflow:hidden}
+.tile{height:120px;display:grid;place-items:center;font-family:var(--font-head);font-size:.95rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.prod .body{padding:0 14px 14px;display:grid;gap:8px}
+.price{font-family:var(--font-head);font-weight:700;font-size:1.15rem}
+.seller{font-size:.85rem;color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:4px;border-radius:99px;padding:2px 10px;font-size:.78rem;font-weight:600}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.hold{background:var(--hold-bg);color:var(--hold)}
+.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.pill.info{background:var(--info-bg);color:var(--info)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.stat{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--surface)}
+.stat small{color:var(--muted);display:block}
+.stat b{font-family:var(--font-head);font-size:1.35rem;font-variant-numeric:tabular-nums}
+.order{display:grid;gap:12px}
+.order header{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:start}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;list-style:none;padding:0;margin:0}
+.steps li{font-size:.76rem;color:var(--muted);border-top:4px solid var(--line);padding-top:6px}
+.steps li.done{border-color:var(--brand);color:var(--ink)}
+.steps li.now{border-color:var(--hold);color:var(--hold);font-weight:600}
+.steps li.flag{border-color:var(--bad);color:var(--bad);font-weight:600}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.muted{color:var(--muted)} .small{font-size:.85rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.field{display:grid;gap:4px;margin-bottom:10px}
+.field label{font-size:.85rem;font-weight:600}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.stepcard{display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
+.num{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:700 .9rem var(--font-head);background:var(--line);color:var(--ink)}
+.num.done{background:var(--brand);color:var(--brand-ink)}
+.stepcard>div{display:grid;gap:8px;min-width:0}
+.locked{opacity:.6}
+.thread{display:grid;gap:8px;max-height:320px;overflow-y:auto;padding:4px}
+.msg{max-width:82%;padding:8px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);overflow-wrap:anywhere}
+.msg.me{justify-self:end;background:var(--brand-soft);border-color:transparent}
+.acc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.acc .card{display:grid;gap:10px;align-content:start}
+.overlay{position:fixed;inset:0;background:rgba(5,15,18,.6);z-index:40;display:grid;place-items:center;padding:16px}
+.modal{background:var(--surface);color:var(--ink);border-radius:16px;width:min(460px,100%);max-height:92vh;overflow-y:auto;padding:20px;display:grid;gap:14px;border:1px solid var(--line)}
+.tabs{display:flex;gap:6px}
+.tabs button{flex:1;padding:9px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:600 .9rem var(--font-body);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.opt{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.opt input{width:auto;min-height:0}
+.opt.sel{border-color:var(--brand);background:var(--brand-soft)}
+.sum{display:grid;gap:4px;border-top:1px dashed var(--line);padding-top:10px;font-variant-numeric:tabular-nums}
+.sum div{display:flex;justify-content:space-between;gap:12px}
+.map{width:100%;height:auto;border:1px solid var(--line);border-radius:12px;background:var(--bg);display:block}
+.err{color:var(--bad);font-size:.85rem;min-height:1.1em}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:60;max-width:calc(100vw - 32px);font-size:.9rem}
+#aiBtn{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:35;box-shadow:0 6px 18px rgba(0,0,0,.25);border-radius:99px;padding-inline:18px}
+#aiPanel{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(70px + env(safe-area-inset-bottom,0px));width:min(390px,calc(100vw - 32px));max-height:72vh;z-index:36;display:grid;grid-template-rows:auto 1fr auto auto;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden}
+#aiPanel header{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+#chatlog{padding:12px;display:grid;gap:8px;overflow-y:auto;align-content:start;min-height:140px}
+#aiPanel form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}
+#aiPanel form input{flex:1}
+.sugs{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 10px}
+.empty{text-align:center;color:var(--muted);padding:30px 10px}
+@media(prefers-reduced-motion:no-preference){.overlay{animation:fade .15s ease-out}@keyframes fade{from{opacity:0}}}
+</style>
+
+<div class="demo"><div class="wrap">Version de démonstration : aucun vrai paiement n'est effectué et les données restent sur cet appareil. N'entrez pas de vraies informations bancaires ni de vrai mot de passe.</div></div>
+<header class="top"><div class="wrap bar">
+  <a class="brand" href="#" data-a="go" data-v="catalogue" aria-label="Marché Sûr, accueil">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 5 6v9c0 7 4.6 12.3 11 15 6.4-2.7 11-8 11-15V6L16 2Z" fill="currentColor" opacity=".18"/><path d="M16 2 5 6v9c0 7 4.6 12.3 11 15 6.4-2.7 11-8 11-15V6L16 2Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="m11 16 4 4 7-8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Marché Sûr</a>
+  <div id="auth"></div>
+  <nav id="nav" aria-label="Navigation"></nav>
+</div></header>
+<main class="wrap" id="main"></main>
+<div id="modal"></div>
+<div id="toast" role="status" hidden></div>
+<button class="btn" id="aiBtn" data-a="ai-toggle" aria-expanded="false">Assistant IA</button>
+<section id="aiPanel" hidden aria-label="Assistant IA">
+  <header><h3>Assistant Marché Sûr</h3><button class="btn ghost sm" data-a="ai-toggle">Fermer</button></header>
+  <div id="chatlog" aria-live="polite"></div>
+  <div class="sugs" id="sugs"></div>
+  <form id="chatform"><input id="chatinput" type="text" placeholder="Posez votre question" autocomplete="off" aria-label="Votre question"><button class="btn" type="submit">Envoyer</button></form>
+</section>
+
+<script>
+(function(){
+const LS='marche-sur-v1', FEE_ACT=10000, FEE_PCT=0.02, FEE_ACCOUNT='686290682';
+const CATS=['Tous','Électronique','Mode','Maison','Alimentation'];
+const METHODS=[
+ {id:'orange',name:'Orange Money',kind:'mobile',hint:'Numéro Orange Money (ex. 6XXXXXXXX)'},
+ {id:'mtn',name:'MTN MoMo',kind:'mobile',hint:'Numéro MTN Mobile Money (ex. 6XXXXXXXX)'},
+ {id:'bank',name:'Compte bancaire',kind:'bank',hint:'Numéro de compte bancaire'}];
+const DEMO_SELLERS=[
+ {id:'d1',name:'Mboa Tech',city:'Douala'},{id:'d2',name:'Atelier Kaba',city:'Yaoundé'},
+ {id:'d3',name:'Wax & Co',city:'Bafoussam'},{id:'d4',name:'Ferme Njoh',city:'Bafoussam'}];
+const ST={bloque:'Argent bloqué',expedie:'Expédiée',libere:'Argent débloqué',litige:'Litige en cours'};
+const CITIES=[{n:'Douala',la:4.05,lo:9.70},{n:'Yaoundé',la:3.87,lo:11.52},{n:'Bafoussam',la:5.48,lo:10.42},{n:'Bamenda',la:5.96,lo:10.16},{n:'Garoua',la:9.30,lo:13.40},{n:'Ngaoundéré',la:7.32,lo:13.58},{n:'Bertoua',la:4.58,lo:13.68},{n:'Kribi',la:2.94,lo:9.91},{n:'Limbé',la:4.02,lo:9.21},{n:'Maroua',la:10.59,lo:14.32},{n:'Ebolowa',la:2.90,lo:11.15}];
+const DEMO_MS=60000;
+const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const cityOf=t=>{const n=norm(t);return CITIES.find(c=>n.includes(norm(c.n)))||CITIES[0];};
+const proj=c=>({x:20+(c.lo-8.8)/6*360,y:25+(11-c.la)/8.5*250});
+function kmBetween(a,b){const R=6371,r=x=>x*Math.PI/180,dl=r(b.la-a.la),dn=r(b.lo-a.lo);const h=Math.sin(dl/2)**2+Math.cos(r(a.la))*Math.cos(r(b.la))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+function trackHTML(id){const o=S.orders.find(x=>x.id===id);if(!o)return '';
+ const A=cityOf(sellerInfo(o.sellerId).city),B=cityOf(o.toCity||'Yaoundé');
+ const p=Math.min(1,Math.max(0,(Date.now()-(o.shipTs||o.ts))/DEMO_MS));
+ const pa=proj(A),pb=proj(B);if(A===B){pb.x+=45;pb.y+=22;}
+ const cx=(pa.x+pb.x)/2+(pb.y-pa.y)*0.18,cy=(pa.y+pb.y)/2-(pb.x-pa.x)*0.18;
+ const t=p,m={x:(1-t)**2*pa.x+2*(1-t)*t*cx+t*t*pb.x,y:(1-t)**2*pa.y+2*(1-t)*t*cy+t*t*pb.y};
+ const lat=A.la+(B.la-A.la)*p,lon=A.lo+(B.lo-A.lo)*p,d=Math.max(5,Math.round(kmBetween(A,B)*1.3));
+ const left=Math.ceil((1-p)*DEMO_MS/1000),arrived=p>=1;
+ const path=`M${pa.x} ${pa.y} Q${cx} ${cy} ${pb.x} ${pb.y}`;
+ let grid='';for(let i=0;i<=400;i+=50)grid+=`<line x1="${i}" y1="0" x2="${i}" y2="300" stroke="var(--line)" stroke-width="1"/>`;for(let j=0;j<=300;j+=50)grid+=`<line x1="0" y1="${j}" x2="400" y2="${j}" stroke="var(--line)" stroke-width="1"/>`;
+ const dots=CITIES.map(c=>{const q=proj(c);return `<circle cx="${q.x}" cy="${q.y}" r="3" fill="var(--muted)"/><text x="${q.x+6}" y="${q.y+3}" font-size="9" fill="var(--muted)">${c.n}</text>`;}).join('');
+ return `<svg class="map" viewBox="0 0 400 300" role="img" aria-label="Carte schématique du trajet de ${esc(A.n)} à ${esc(B.n)}">${grid}${dots}
+ <path d="${path}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 4"/>
+ <path d="${path}" pathLength="100" fill="none" stroke="var(--brand)" stroke-width="4" stroke-dasharray="${(p*100).toFixed(1)} 100"/>
+ <circle cx="${pa.x}" cy="${pa.y}" r="6" fill="var(--ink)"/><circle cx="${pb.x}" cy="${pb.y}" r="7" fill="var(--brand)"/>
+ <circle cx="${m.x.toFixed(1)}" cy="${m.y.toFixed(1)}" r="8" fill="var(--hold)" stroke="var(--surface)" stroke-width="3"/></svg>
+ <div class="sum"><div><span>Départ</span><span>${esc(sellerInfo(o.sellerId).name)} · ${esc(A.n)}</span></div><div><span>Arrivée</span><span>${esc(B.n)}</span></div><div><span>Distance estimée</span><span>≈ ${d} km</span></div>
+ <div><span>Position du colis</span><span>${lat.toFixed(3)}° N, ${lon.toFixed(3)}° E</span></div><div><span>Statut</span><span><span class="pill ${arrived?'ok':'hold'}">${arrived?'Arrivé':'En route'}</span></span></div>
+ ${arrived?'':`<div><span>Arrivée (démo)</span><span>dans ${left} s</span></div>`}</div>
+ ${arrived?`<p class="small">Le colis est arrivé. Vérifiez-le, puis débloquez l'argent pour payer ${esc(o.sellerName)}.</p><button class="btn" data-a="track-confirm" data-id="${o.id}">Débloquer l'argent</button>`:''}
+ <p class="small muted">Carte schématique et position simulées : le trajet complet est accéléré pour la démonstration.</p>`;}
+
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>Math.round(n).toLocaleString('fr-FR')+' FCFA';
+const $=s=>document.querySelector(s);
+
+function seed(){return{users:[],session:null,messages:[],orders:[],platform:{orange:'',mtn:'',bank:''},
+ products:[
+  {id:'p1',title:'Smartphone reconditionné 64 Go',price:85000,cat:'Électronique',sellerId:'d1'},
+  {id:'p2',title:'Casque Bluetooth pliable',price:9800,cat:'Électronique',sellerId:'d1'},
+  {id:'p3',title:'Sac en cuir artisanal',price:18000,cat:'Mode',sellerId:'d2'},
+  {id:'p4',title:'Pagne wax, 6 yards',price:12000,cat:'Mode',sellerId:'d3'},
+  {id:'p5',title:'Ventilateur rechargeable',price:22500,cat:'Maison',sellerId:'d1'},
+  {id:'p6',title:'Machine à coudre manuelle',price:45000,cat:'Maison',sellerId:'d2'},
+  {id:'p7',title:'Huile de palme, bidon 5 L',price:7500,cat:'Alimentation',sellerId:'d4'},
+  {id:'p8',title:'Sac de riz local, 25 kg',price:16500,cat:'Alimentation',sellerId:'d4'}]};}
+let S; try{const r=localStorage.getItem(LS); S=r?JSON.parse(r):seed();}catch(e){S=seed();}
+S.platform=S.platform||{orange:'',mtn:'',bank:''}; if(!S.platform.orange)S.platform.orange=FEE_ACCOUNT;
+const save=()=>{try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}};
+const me=()=>S.users.find(u=>u.id===S.session)||null;
+const ui={view:'catalogue',q:'',cat:'Tous',modal:null,chatWith:null,confirm:null};
+
+async function sha(t){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}catch(e){return btoa(unescape(encodeURIComponent(t)));}}
+let tt; function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,3600);}
+const sellerInfo=id=>{const d=DEMO_SELLERS.find(s=>s.id===id); if(d) return {name:d.name,city:d.city,verified:true};
+ const u=S.users.find(x=>x.id===id); return u?{name:(u.shop&&u.shop.name)||u.name,city:(u.shop&&u.shop.city)||'',verified:!!(u.shop&&u.shop.status==='verified')}:{name:'Vendeur',city:'',verified:false};};
+const method=id=>METHODS.find(m=>m.id===id);
+
+/* ---------- Rendu ---------- */
+function renderAuth(){const u=me();
+ $('#auth').innerHTML=u?`<span class="small muted">${esc(u.name)}</span><button class="btn ghost sm" data-a="logout">Déconnexion</button>`
+ :`<button class="btn ghost sm" data-a="auth" data-tab="login">Connexion</button><button class="btn sm" data-a="auth" data-tab="register">Inscription</button>`;}
+function renderNav(){const items=[['catalogue','Catalogue'],['orders','Mes commandes'],['seller','Espace vendeur'],['vendors','Contacter les vendeurs'],['payments','Comptes de paiement']];
+ $('#nav').innerHTML=items.map(([v,l])=>`<button data-a="go" data-v="${v}" ${ui.view===v?'aria-current="page"':''}>${l}</button>`).join('');}
+function renderMain(){renderNav();renderAuth();
+ const f={catalogue:vCatalogue,orders:vOrders,seller:vSeller,vendors:vVendors,payments:vPayments}[ui.view];
+ $('#main').innerHTML=f();}
+const needLogin=t=>`<div class="card empty"><h2>Connexion requise</h2><p>${t}</p><p style="margin-top:14px"><button class="btn" data-a="auth" data-tab="login">Se connecter</button> <button class="btn ghost" data-a="auth" data-tab="register">S'inscrire</button></p></div>`;
+
+function prodCard(p,i){const s=sellerInfo(p.sellerId);const tint=['--t1','--t2','--t3','--t4'][i%4];
+ return `<article class="card prod"><div class="tile" style="background:var(${tint})">${esc(p.cat)}</div><div class="body"><h3>${esc(p.title)}</h3>
+ <div class="price">${fmt(p.price)}</div><div class="seller">${esc(s.name)}${s.city?' · '+esc(s.city):''} ${s.verified?'<span class="pill ok">Vendeur vérifié</span>':''}</div>
+ <button class="btn" data-a="buy" data-id="${p.id}">Acheter, argent bloqué</button><button class="btn ghost sm" data-a="talk" data-q="1" data-id="${p.sellerId}" data-n="${esc(s.name)}">Parler au vendeur</button></div></article>`;}
+function gridHTML(){const q=ui.q.trim().toLowerCase();
+ const list=S.products.filter(p=>(ui.cat==='Tous'||p.cat===ui.cat)&&(!q||p.title.toLowerCase().includes(q)));
+ return list.length?list.map(prodCard).join(''):'<p class="empty">Aucun produit ne correspond à votre recherche.</p>';}
+function vCatalogue(){return `<section class="card hero"><h1>Achetez sans craindre l'arnaque</h1>
+ <p>Votre argent reste bloqué chez Marché Sûr jusqu'à ce que vous confirmiez la réception de votre commande. Seuls les vendeurs vérifiés peuvent publier.</p>
+ <ol class="flow"><li><b>1. Vous payez</b><span>Orange Money, MTN MoMo ou compte bancaire.</span></li>
+ <li><b>2. L'argent est bloqué</b><span>Le vendeur le voit, mais ne peut pas encore le toucher.</span></li>
+ <li><b>3. Vous recevez</b><span>Le vendeur expédie, vous vérifiez le colis.</span></li>
+ <li><b>4. Vous débloquez</b><span>Un bouton verse l'argent à votre fournisseur.</span></li></ol></section>
+ <section class="tools"><input id="q" type="search" placeholder="Rechercher un produit" value="${esc(ui.q)}" aria-label="Rechercher un produit">
+ <div class="chips" id="chips">${CATS.map(c=>`<button class="chip" data-a="cat" data-c="${c}" aria-pressed="${ui.cat===c}">${c}</button>`).join('')}</div></section>
+ <section class="grid" id="grid">${gridHTML()}</section>`;}
+
+const timeline=o=>{const idx={bloque:1,expedie:2,libere:3,litige:2}[o.status];const labels=['Paiement reçu','Argent bloqué','Expédiée','Argent débloqué'];
+ return `<ol class="steps">${labels.map((l,i)=>`<li class="${o.status==='litige'&&i===2?'flag':i<idx?'done':i===idx?'now':''}${i<=idx&&o.status!=='litige'&&i<idx?'':''}">${l}</li>`).join('')}</ol>`;};
+function vOrders(){const u=me(); if(!u) return needLogin('Connectez-vous pour suivre vos commandes et débloquer l\'argent.');
+ const mine=S.orders.filter(o=>o.buyerId===u.id).sort((a,b)=>b.ts-a.ts);
+ const held=mine.filter(o=>o.status!=='libere').reduce((s,o)=>s+o.total,0), paid=mine.filter(o=>o.status==='libere').reduce((s,o)=>s+o.price,0);
+ return `<h1>Mes commandes</h1><div class="stats"><div class="stat"><small>Argent bloqué</small><b>${fmt(held)}</b></div><div class="stat"><small>Versé aux fournisseurs</small><b>${fmt(paid)}</b></div></div>`+
+ (mine.length?mine.map(o=>{
+  let act='';
+  if(o.status==='bloque') act=`<span class="small muted">En attente d'expédition par ${esc(o.sellerName)}.</span><button class="btn ghost sm" data-a="sim-ship" data-id="${o.id}">Simuler l'expédition (démo)</button>`;
+  if(o.status==='expedie') act= ui.confirm===o.id
+   ?`<span class="small">Confirmez-vous avoir reçu et vérifié votre commande ? L'argent sera versé à ${esc(o.sellerName)} et ne pourra plus être récupéré.</span><button class="btn" data-a="release" data-id="${o.id}">Oui, débloquer l'argent</button><button class="btn ghost" data-a="confirm" data-id="">Annuler</button>`
+   :`<button class="btn ghost" data-a="track" data-id="${o.id}">Suivre la livraison (GPS)</button><button class="btn" data-a="confirm" data-id="${o.id}">J'ai reçu ma commande : débloquer l'argent</button><button class="btn danger" data-a="dispute" data-id="${o.id}">Signaler un problème</button>`;
+  if(o.status==='litige') act='<span class="small">L\'argent reste bloqué pendant l\'examen du litige par notre équipe.</span>';
+  if(o.status==='libere') act=`<span class="small muted">Fonds versés à ${esc(o.sellerName)}.</span>`;
+  return `<article class="card order"><header><div><h3>${esc(o.title)}</h3><div class="small muted">${esc(o.sellerName)} · payé avec ${esc(method(o.method).name)} •••• ${esc(o.last4)}</div></div>
+  <div style="text-align:right"><b>${fmt(o.total)}</b><div><span class="pill ${o.status==='libere'?'ok':o.status==='litige'?'bad':'hold'}">${ST[o.status]}</span></div></div></header>${timeline(o)}<div class="actions">${act}<button class="btn ghost sm" data-a="talk" data-q="1" data-id="${o.sellerId}" data-n="${esc(o.sellerName)}">Parler au fournisseur</button></div></article>`;}).join('')
+  :'<div class="card empty">Aucune commande pour le moment. Parcourez le catalogue pour en passer une.</div>');}
+
+function vSeller(){const u=me(); if(!u) return needLogin('Inscrivez-vous comme vendeur pour publier vos produits.');
+ if(u.role!=='seller') return `<div class="card empty"><h2>Devenez vendeur</h2><p>Votre compte est un compte acheteur. Passez en compte vendeur pour demander la vérification de votre profil.</p><p style="margin-top:14px"><button class="btn" data-a="be-seller">Passer en compte vendeur</button></p></div>`;
+ const sh=u.shop||{status:'none'}; const ver=sh.status==='verified', act=!!u.activated, ready=ver&&act;
+ const sales=S.orders.filter(o=>o.sellerId===u.id).sort((a,b)=>b.ts-a.ts);
+ const pend=sales.filter(o=>o.status!=='libere').reduce((s,o)=>s+o.price,0), got=sales.filter(o=>o.status==='libere').reduce((s,o)=>s+o.price,0);
+ const verBlock= ver?`<span class="pill ok">Profil vérifié : ${esc(sh.name)}, ${esc(sh.city)}</span>`
+  : sh.status==='pending'?`<span class="pill hold">Vérification en cours</span><p class="small muted">Notre équipe contrôle votre pièce d'identité et votre activité.</p><div><button class="btn ghost sm" data-a="sim-verify">Simuler la validation par l'équipe (démo)</button></div>`
+  :`<form data-form="shop"><div class="two"><div class="field"><label for="sn">Nom de la boutique</label><input id="sn" name="name" required maxlength="50"></div><div class="field"><label for="sc">Ville</label><input id="sc" name="city" required maxlength="40"></div></div>
+   <div class="two"><div class="field"><label for="si">Pièce d'identité</label><select id="si" name="idt"><option>Carte nationale d'identité</option><option>Passeport</option><option>Permis de conduire</option></select></div><div class="field"><label for="sa">Activité</label><input id="sa" name="act" placeholder="Ce que vous vendez" required maxlength="80"></div></div>
+   <button class="btn" type="submit">Envoyer pour vérification</button></form>`;
+ const card=(n,done,title,body,lock)=>`<div class="card stepcard ${lock?'locked':''}"><span class="num ${done?'done':''}">${done?'✓':n}</span><div><h3>${title}</h3>${body}</div></div>`;
+ return `<h1>Espace vendeur</h1>
+ ${card(1,ver,'Vérifier mon profil',verBlock)}
+ ${card(2,act,'Payer les frais d\'activation',act?'<span class="pill ok">Frais payés</span>':`<p class="small muted">Les frais d'activation de ${fmt(FEE_ACT)} sont à payer une seule fois avant de vendre. Ils sont versés sur le compte Orange Money de Marché Sûr (686 290 682).</p><div><button class="btn" data-a="pay-fee">Payer les frais d'activation</button></div>`)}
+ ${card(3,false,'Contacter les autres vendeurs','<p class="small muted">Échangez avec les autres vendeurs avant de commencer, même si votre profil n\'est pas encore validé.</p><div><button class="btn ghost" data-a="go" data-v="vendors">Contacter les vendeurs</button></div>')}
+ ${card(4,!!u.payout,'Compte de réception',u.payout?`<span class="pill ok">${esc(method(u.payout.method).name)} •••• ${esc(u.payout.last4)}</span>`:`<form data-form="payout"><div class="two"><div class="field"><label for="pm">Moyen de réception</label><select id="pm" name="method">${METHODS.map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}</select></div><div class="field"><label for="pn">Numéro</label><input id="pn" name="num" inputmode="numeric" required minlength="8" maxlength="24"></div></div><button class="btn" type="submit">Enregistrer</button></form>`)}
+ ${card(5,false,'Publier un produit',ready?`<form data-form="product"><div class="field"><label for="pt">Nom du produit</label><input id="pt" name="title" required maxlength="70"></div><div class="two"><div class="field"><label for="pp">Prix (FCFA)</label><input id="pp" name="price" type="number" min="100" step="50" required></div><div class="field"><label for="pc">Catégorie</label><select id="pc" name="cat">${CATS.slice(1).map(c=>`<option>${c}</option>`).join('')}</select></div></div><button class="btn" type="submit">Publier dans le catalogue</button></form>`:'<p class="small muted">Disponible après la vérification du profil et le paiement des frais d\'activation.</p>',!ready)}
+ <section><h2>Mes ventes</h2><div class="stats" style="margin-block:10px"><div class="stat"><small>En attente de déblocage</small><b>${fmt(pend)}</b></div><div class="stat"><small>Reçu</small><b>${fmt(got)}</b></div></div>
+ ${sales.length?sales.map(o=>`<article class="card row" style="margin-bottom:10px"><div><h3>${esc(o.title)}</h3><div class="small muted">${fmt(o.price)} · <span class="pill ${o.status==='libere'?'ok':o.status==='litige'?'bad':'hold'}">${ST[o.status]}</span></div></div><div class="actions"><button class="btn ghost sm" data-a="talk" data-id="${o.buyerId}" data-n="${esc((S.users.find(x=>x.id===o.buyerId)||{}).name||'Client')}">Parler au client</button>${o.status==='bloque'?`<button class="btn sm" data-a="ship" data-id="${o.id}">Marquer comme expédiée</button>`:''}</div></article>`).join(''):'<p class="muted small">Aucune vente pour le moment.</p>'}</section>`;}
+
+function vVendors(){const u=me(); if(!u) return needLogin('Connectez-vous pour échanger avec les autres vendeurs.');
+ const list=[...DEMO_SELLERS,...S.users.filter(x=>x.role==='seller'&&x.id!==u.id).map(x=>({id:x.id,name:(x.shop&&x.shop.name)||x.name,city:(x.shop&&x.shop.city)||''}))];
+ let thread='';
+ if(ui.chatWith){const w=list.find(x=>x.id===ui.chatWith);const ms=S.messages.filter(m=>(m.from===u.id&&m.to===ui.chatWith)||(m.to===u.id&&m.from===ui.chatWith)).sort((a,b)=>a.ts-b.ts);
+  thread=`<section class="card"><div class="row"><h2>Discussion avec ${esc(w?w.name:'vendeur')}</h2><button class="btn ghost sm" data-a="chat-close">Fermer</button></div>
+  <div class="thread" id="thread" style="margin-block:12px">${ms.length?ms.map(m=>`<div class="msg ${m.from===u.id?'me':''}">${esc(m.text)}</div>`).join(''):'<p class="muted small">Aucun message. Présentez-vous en une phrase.</p>'}</div>
+  <form data-form="msg" class="row" style="flex-wrap:nowrap"><input id="mt" name="text" required maxlength="300" placeholder="Votre message" aria-label="Votre message"><button class="btn" type="submit">Envoyer</button></form></section>`;}
+ return `<h1>Contacter les vendeurs</h1><p class="muted">Posez vos questions aux autres vendeurs avant de vendre : livraison, prix, bonnes pratiques.</p>${thread}
+ <div class="grid">${list.map(v=>`<article class="card"><h3>${esc(v.name)}</h3><p class="small muted">${esc(v.city)||'Ville non précisée'}</p><p style="margin-top:10px"><button class="btn ghost sm" data-a="chat" data-id="${v.id}">Contacter</button></p></article>`).join('')}</div>`;}
+
+function vPayments(){const d={orange:'Paiements des acheteurs et versements aux fournisseurs par Orange Money.',mtn:'Paiements des acheteurs et versements aux fournisseurs par MTN Mobile Money.',bank:'Paiements et versements par virement sur compte bancaire.'};
+ return `<h1>Comptes de paiement</h1><p class="muted">Les acheteurs règlent leurs fournisseurs avec l'un de ces trois moyens. L'argent passe par le séquestre avant d'être versé.</p>
+ <div class="acc">${METHODS.map(m=>`<form class="card" data-form="platform" data-m="${m.id}"><div class="row"><h3>${m.name}</h3><span class="pill ${S.platform[m.id]?'ok':'info'}">${S.platform[m.id]?'Compte renseigné':'Simulation'}</span></div><p class="small muted">${d[m.id]}</p>
+ <div class="field"><label for="pa-${m.id}">Compte de la plateforme (réception des fonds)</label><input id="pa-${m.id}" name="acc" value="${esc(S.platform[m.id])}" placeholder="À renseigner" maxlength="40"></div><button class="btn ghost sm" type="submit">Enregistrer</button></form>`).join('')}</div>
+ <div class="card"><h3>Pour passer en conditions réelles</h3><p class="small muted" style="margin-top:6px">Cette version simule les paiements. Pour encaisser réellement, il faut brancher un prestataire de paiement agréé pour Orange Money, MTN MoMo et la banque, ainsi qu'un serveur qui garde les comptes, les commandes et le séquestre.</p></div>`;}
+
+/* ---------- Modales ---------- */
+function renderModal(){const m=ui.modal;const el=$('#modal');if(!m||m.type!=='track'){clearInterval(ui.timer);ui.timer=null;}if(!m){el.innerHTML='';return;}
+ let inner='';
+ if(m.type==='auth'){inner=`<div class="row"><h2>${m.tab==='login'?'Connexion':'Inscription'}</h2><button class="btn ghost sm" data-a="close">Fermer</button></div>
+  <div class="tabs" role="tablist"><button role="tab" aria-selected="${m.tab==='login'}" data-a="auth" data-tab="login">Connexion</button><button role="tab" aria-selected="${m.tab==='register'}" data-a="auth" data-tab="register">Inscription</button></div>
+  <form data-form="${m.tab}">${m.tab==='register'?`<div class="field"><label for="an">Nom complet</label><input id="an" name="name" required maxlength="60"></div>`:''}
+  <div class="field"><label for="ap">Numéro de téléphone</label><input id="ap" name="phone" inputmode="tel" required minlength="8" maxlength="16"></div>
+  <div class="field"><label for="aw">Mot de passe</label><input id="aw" name="pwd" type="password" required minlength="6"></div>
+  ${m.tab==='register'?`<div class="field"><label for="ar">Je suis</label><select id="ar" name="role"><option value="buyer">Acheteur</option><option value="seller">Vendeur</option></select></div>`:''}
+  <p class="err" id="aerr">${esc(m.err||'')}</p><button class="btn" type="submit" style="width:100%">${m.tab==='login'?'Se connecter':'Créer mon compte'}</button></form>`;}
+ if(m.type==='checkout'){const fee=m.mode==='fee';const p=fee?null:S.products.find(x=>x.id===m.productId);const price=fee?FEE_ACT:p.price;const f=fee?0:price*FEE_PCT;const sel=method(m.method||'orange');
+  inner=`<div class="row"><h2>${fee?'Frais d\'activation vendeur':'Payer en séquestre'}</h2><button class="btn ghost sm" data-a="close" ${m.busy?'disabled':''}>Fermer</button></div>
+  <p class="small muted">${fee?'Paiement unique avant de commencer à vendre.':esc(p.title)+' · '+esc(sellerInfo(p.sellerId).name)}</p>
+  ${fee?'':`<div class="field"><label for="cc">Ville de livraison</label><select id="cc">${CITIES.map(c=>`<option ${(m.city||'Yaoundé')===c.n?'selected':''}>${c.n}</option>`).join('')}</select></div>`}
+  ${METHODS.map(x=>`<label class="opt${x.id===sel.id?'sel':''}"><input type="radio" name="meth" value="${x.id}" data-a="pay-method" ${x.id===sel.id?'checked':''}>${x.name}</label>`).join('')}
+  <div class="field"><label for="cn">${sel.hint}</label><input id="cn" inputmode="numeric" value="${esc(m.number||'')}" maxlength="24" autocomplete="off"></div>
+  <div class="sum"><div><span>${fee?'Frais d\'activation':'Produit'}</span><span>${fmt(price)}</span></div>${fee?'':`<div><span>Frais de protection (2 %)</span><span>${fmt(f)}</span></div>`}<div><b>Total</b><b>${fmt(price+f)}</b></div></div>
+  ${fee?'<p class="small">Les frais d\'activation sont versés sur le compte Orange Money de Marché Sûr : <b>686 290 682</b>.</p>':'<p class="small muted">Votre argent est bloqué et ne sera versé au vendeur que lorsque vous confirmerez la réception.</p>'}
+  <p class="err" id="cerr">${esc(m.err||'')}</p>
+  <button class="btn" data-a="pay-go" ${m.busy?'disabled':''}>${m.busy?'Validation en cours (simulation)…':fee?'Payer les frais':'Payer et bloquer l\'argent'}</button>`;}
+ if(m.type==='track'){const o=S.orders.find(x=>x.id===m.id);inner=`<div class="row"><h2>Suivi de livraison</h2><button class="btn ghost sm" data-a="close">Fermer</button></div><p class="small muted">${esc(o?o.title:'')}</p><div id="trackbody" style="display:grid;gap:12px">${trackHTML(m.id)}</div>`;}
+ if(m.type==='chat'){const u=me();const ms=S.messages.filter(x=>(x.from===u.id&&x.to===m.with)||(x.to===u.id&&x.from===m.with)).sort((a,b)=>a.ts-b.ts);
+  inner=`<div class="row"><h2>Discussion avec ${esc(m.name)}</h2><button class="btn ghost sm" data-a="close">Fermer</button></div>
+  <p class="small muted">Restez dans l'application : votre argent n'est protégé que si vous payez ici. Ne donnez jamais de code de confirmation.</p>
+  <div class="thread" id="cthread">${ms.length?ms.map(x=>`<div class="msg ${x.from===u.id?'me':''}">${esc(x.text)}</div>`).join(''):'<p class="muted small">Aucun message. Posez votre question.</p>'}</div>
+  ${m.quick?`<div class="chips">${['Où en est ma commande ?','Pouvez-vous confirmer l\'envoi ?','Quand allez-vous livrer ?'].map(t=>`<button class="chip" type="button" data-a="quick" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>`:''}
+  <form data-form="cmsg" class="row" style="flex-wrap:nowrap"><input id="ct" name="text" required maxlength="300" placeholder="Votre message" aria-label="Votre message" autocomplete="off"><button class="btn" type="submit">Envoyer</button></form>`;}
+ el.innerHTML=`<div class="overlay" data-a="overlay"><div class="modal" role="dialog" aria-modal="true">${inner}</div></div>`;}
+
+/* ---------- Actions ---------- */
+function go(v){ui.view=v;ui.confirm=null;renderMain();window.scrollTo(0,0);}
+function release(id){const o=S.orders.find(x=>x.id===id);if(!o)return;o.status='libere';ui.confirm=null;save();renderMain();toast(`Argent débloqué : ${fmt(o.price)} versés à ${o.sellerName}.`);}
+const actions={
+ go:d=>go(d.v), close:()=>{ui.modal=null;renderModal();},
+ overlay:(d,e)=>{if(e.target.classList.contains('overlay')&&!(ui.modal&&ui.modal.busy)){ui.modal=null;renderModal();}},
+ auth:d=>{ui.modal={type:'auth',tab:d.tab};renderModal();},
+ logout:()=>{S.session=null;save();ui.chatWith=null;renderMain();toast('Vous êtes déconnecté.');},
+ cat:d=>{ui.cat=d.c;$('#grid').innerHTML=gridHTML();document.querySelectorAll('#chips .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===ui.cat));},
+ buy:d=>{if(!me()){ui.modal={type:'auth',tab:'register'};renderModal();toast('Connectez-vous pour acheter.');return;}ui.modal={type:'checkout',mode:'order',productId:d.id,method:'orange',number:''};renderModal();},
+ 'pay-fee':()=>{ui.modal={type:'checkout',mode:'fee',method:'orange',number:''};renderModal();},
+ 'pay-method':d=>{const m=ui.modal;const n=$('#cn');if(n)m.number=n.value;const cc=$('#cc');if(cc)m.city=cc.value;m.method=document.querySelector('input[name=meth]:checked').value;m.err='';renderModal();const c=$('#cn');if(c)c.focus();},
+ 'pay-go':()=>{const m=ui.modal;const cc=$('#cc');if(cc)m.city=cc.value;const num=($('#cn').value||'').replace(/\D/g,'');const need=m.method==='bank'?8:9;
+  if(num.length<need){m.number=$('#cn').value;m.err=m.method==='bank'?'Entrez un numéro de compte valide (au moins 8 chiffres).':'Entrez un numéro à 9 chiffres.';renderModal();return;}
+  m.busy=true;m.err='';m.number=num;renderModal();
+  setTimeout(()=>{const u=me();const last4=num.slice(-4);
+   if(m.mode==='fee'){u.activated=true;toast('Frais d\'activation payés.');}
+   else{const p=S.products.find(x=>x.id===m.productId);const fee=Math.round(p.price*FEE_PCT);
+    S.orders.push({id:uid(),productId:p.id,title:p.title,price:p.price,fee,total:p.price+fee,buyerId:u.id,sellerId:p.sellerId,sellerName:sellerInfo(p.sellerId).name,method:m.method,last4,status:'bloque',toCity:m.city||'Yaoundé',ts:Date.now()});
+    ui.view='orders';toast('Paiement reçu : votre argent est bloqué en séquestre.');}
+   ui.modal=null;save();renderModal();renderMain();window.scrollTo(0,0);},1300);},
+ 'sim-ship':d=>{const o=S.orders.find(x=>x.id===d.id);o.status='expedie';o.shipTs=Date.now();save();renderMain();toast('Commande marquée comme expédiée.');},
+ ship:d=>{const o=S.orders.find(x=>x.id===d.id);o.status='expedie';o.shipTs=Date.now();save();renderMain();toast('Commande marquée comme expédiée. L\'acheteur doit confirmer la réception.');},
+ confirm:d=>{ui.confirm=d.id||null;renderMain();},
+ release:d=>release(d.id),
+ track:d=>{ui.modal={type:'track',id:d.id};renderModal();clearInterval(ui.timer);ui.timer=setInterval(()=>{if(ui.modal&&ui.modal.type==='track'){const b=$('#trackbody');if(b)b.innerHTML=trackHTML(ui.modal.id);}},1000);},
+ 'track-confirm':d=>{ui.modal=null;renderModal();ui.view='orders';ui.confirm=d.id;renderMain();window.scrollTo(0,0);},
+ talk:d=>{const u=me();if(!u){ui.modal={type:'auth',tab:'login'};renderModal();toast('Connectez-vous pour discuter.');return;}
+  if(d.id===u.id){toast('Ceci est votre propre produit.');return;}
+  ui.modal={type:'chat',with:d.id,name:d.n,quick:d.q==='1'};renderModal();const t=$('#cthread');if(t)t.scrollTop=t.scrollHeight;},
+ quick:d=>{const i=$('#ct');if(i){i.value=d.t;i.focus();}},
+ dispute:d=>{const o=S.orders.find(x=>x.id===d.id);o.status='litige';save();renderMain();toast('Litige ouvert : l\'argent reste bloqué.');},
+ 'be-seller':()=>{me().role='seller';save();renderMain();},
+ 'sim-verify':()=>{me().shop.status='verified';save();renderMain();toast('Profil vérifié.');},
+ chat:d=>{ui.chatWith=d.id;renderMain();const t=$('#thread');if(t)t.scrollTop=t.scrollHeight;},
+ 'chat-close':()=>{ui.chatWith=null;renderMain();},
+ 'ai-toggle':()=>{const p=$('#aiPanel');p.hidden=!p.hidden;$('#aiBtn').setAttribute('aria-expanded',!p.hidden);if(!p.hidden){if(!chat.length)chat.push({r:'a',t:'Bonjour, je suis l\'assistant de Marché Sûr. Je peux vous expliquer le séquestre, la vérification des vendeurs ou le déblocage de l\'argent.'});renderChat();renderSugs();$('#chatinput').focus();}}
+};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;if(a==='pay-method')return;if(actions[a]){if(a!=='overlay'&&b.tagName==='A')e.preventDefault();actions[a](b.dataset,e);}});
+document.addEventListener('change',e=>{if(e.target.matches('input[name=meth]'))actions['pay-method'](e.target.dataset);});
+document.addEventListener('input',e=>{if(e.target.id==='q'){ui.q=e.target.value;$('#grid').innerHTML=gridHTML();}});
+
+document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target;const k=f.dataset.form;if(!k)return;const v=Object.fromEntries(new FormData(f));const u=me();
+ if(k==='register'){const phone=v.phone.replace(/\s/g,'');if(S.users.some(x=>x.phone===phone)){ui.modal.err='Ce numéro a déjà un compte. Connectez-vous.';renderModal();return;}
+  const nu={id:uid(),name:v.name.trim(),phone,role:v.role,pwd:await sha(v.pwd),shop:{status:'none'},activated:false,payout:null};S.users.push(nu);S.session=nu.id;ui.modal=null;save();renderModal();ui.view=nu.role==='seller'?'seller':ui.view;renderMain();toast('Compte créé. Bienvenue, '+nu.name+'.');}
+ else if(k==='login'){const phone=v.phone.replace(/\s/g,'');const x=S.users.find(y=>y.phone===phone&&y.pwd===null);const h=await sha(v.pwd);const us=S.users.find(y=>y.phone===phone&&y.pwd===h);
+  if(!us){ui.modal.err='Numéro ou mot de passe incorrect.';renderModal();return;}S.session=us.id;ui.modal=null;save();renderModal();renderMain();toast('Connexion réussie.');}
+ else if(k==='shop'){u.shop={status:'pending',name:v.name.trim(),city:v.city.trim(),idt:v.idt,act:v.act.trim()};save();renderMain();toast('Dossier envoyé pour vérification.');}
+ else if(k==='payout'){u.payout={method:v.method,last4:v.num.replace(/\D/g,'').slice(-4)};save();renderMain();toast('Compte de réception enregistré.');}
+ else if(k==='product'){S.products.unshift({id:uid(),title:v.title.trim(),price:Math.round(+v.price),cat:v.cat,sellerId:u.id});save();f.reset();toast('Produit publié dans le catalogue.');}
+ else if(k==='platform'){S.platform[f.dataset.m]=v.acc.trim();save();renderMain();toast('Compte enregistré.');}
+ else if(k==='cmsg'){const to=ui.modal.with;S.messages.push({id:uid(),from:u.id,to,text:v.text.trim(),ts:Date.now()});save();renderModal();const t=$('#cthread');if(t)t.scrollTop=t.scrollHeight;const c=$('#ct');if(c)c.focus();
+  if(DEMO_SELLERS.some(s=>s.id===to))setTimeout(()=>{S.messages.push({id:uid(),from:to,to:u.id,text:'Merci pour votre message. Je vérifie votre commande et je reviens vers vous. (Réponse automatique de démonstration.)',ts:Date.now()});save();if(ui.modal&&ui.modal.type==='chat'&&ui.modal.with===to){renderModal();const t2=$('#cthread');if(t2)t2.scrollTop=t2.scrollHeight;}},1100);}
+ else if(k==='msg'){const to=ui.chatWith;S.messages.push({id:uid(),from:u.id,to,text:v.text.trim(),ts:Date.now()});save();renderMain();const t=$('#thread');if(t)t.scrollTop=t.scrollHeight;
+  if(DEMO_SELLERS.some(s=>s.id===to))setTimeout(()=>{S.messages.push({id:uid(),from:to,to:u.id,text:'Merci pour votre message. (Réponse automatique de démonstration.)',ts:Date.now()});save();if(ui.view==='vendors'&&ui.chatWith===to){renderMain();const t2=$('#thread');if(t2)t2.scrollTop=t2.scrollHeight;}},1100);}
+});
+
+/* ---------- Assistant IA ---------- */
+const chat=[];let busy=false;
+const SUGS=['Comment fonctionne le séquestre ?','Quand débloquer l\'argent ?','Comment devenir vendeur ?','Que faire si je ne reçois rien ?'];
+function renderSugs(){$('#sugs').innerHTML=chat.length<3?SUGS.map(s=>`<button class="chip" type="button" data-s="${esc(s)}">${esc(s)}</button>`).join(''):'';}
+function renderChat(){const l=$('#chatlog');l.innerHTML=chat.map(m=>`<div class="msg ${m.r==='u'?'me':''}">${esc(m.t)||'…'}</div>`).join('');l.scrollTop=l.scrollHeight;}
+function fallback(q){q=q.toLowerCase();
+ if(/séquestre|bloqu/.test(q))return 'Le séquestre garde votre paiement chez Marché Sûr. Le vendeur le voit mais ne le touche pas tant que vous n\'avez pas confirmé la réception.';
+ if(/débloqu|livr|reçu|recu/.test(q))return 'Débloquez l\'argent seulement après avoir reçu et vérifié votre commande. Le bouton se trouve dans « Mes commandes » dès que le vendeur a marqué l\'envoi. Le versement au fournisseur est définitif.';
+ if(/vendeur|vendre|vérif|verif|frais/.test(q))return `Pour vendre : faites vérifier votre profil, payez les frais d'activation de ${fmt(FEE_ACT)}, enregistrez votre compte de réception, puis publiez vos produits. Vous pouvez contacter les autres vendeurs avant de commencer.`;
+ if(/problème|probleme|arnaque|rien|litige/.test(q))return 'Si la commande n\'arrive pas ou n\'est pas conforme, n\'appuyez pas sur le déblocage. Utilisez « Signaler un problème » : l\'argent reste bloqué pendant l\'examen.';
+ if(/orange|mtn|momo|banque|payer/.test(q))return 'Vous pouvez payer par Orange Money, MTN MoMo ou compte bancaire. Dans cette démonstration, aucun vrai paiement n\'est effectué.';
+ return 'Je peux vous aider sur le séquestre, le déblocage de l\'argent, les moyens de paiement et la vérification des vendeurs. Que voulez-vous savoir ?';}
+async function ask(text){if(busy||!text.trim())return;busy=true;chat.push({r:'u',t:text});const a={r:'a',t:''};chat.push(a);renderChat();renderSugs();
+ const u=me();const ctx=u?`Utilisateur connecté : rôle ${u.role==='seller'?'vendeur':'acheteur'}${u.role==='seller'?`, profil ${({none:'non soumis',pending:'en vérification',verified:'vérifié'})[(u.shop||{}).status||'none']}, frais d'activation ${u.activated?'payés':'non payés'}`:''}. Commandes en cours : ${S.orders.filter(o=>o.buyerId===u.id&&o.status!=='libere').length}.`:'Utilisateur non connecté.';
+ const hist=chat.slice(0,-2).slice(-6).map(m=>(m.r==='u'?'Client : ':'Assistant : ')+m.t).join('\n');
+ const prompt=`Tu es l'assistant de Marché Sûr, une place de marché camerounaise avec séquestre. Réponds en français simple, en 4 phrases maximum, sans mise en forme.
+Règles de la plateforme : l'acheteur paie par Orange Money, MTN MoMo ou compte bancaire ; l'argent reste bloqué en séquestre ; le vendeur expédie ; l'acheteur confirme la réception avec le bouton « débloquer l'argent » et l'argent est alors versé au fournisseur, de façon définitive ; en cas de problème l'acheteur utilise « Signaler un problème » et l'argent reste bloqué ; les vendeurs doivent faire vérifier leur profil et payer ${fmt(FEE_ACT)} de frais d'activation avant de vendre ; ils peuvent se contacter entre eux avant de vendre ; frais de protection acheteur 2 % ; le suivi GPS de livraison de cette démonstration est simulé.
+Ne demande jamais de mot de passe, code secret ou code de confirmation. Ne promets aucun remboursement. Précise que c'est une version de démonstration si on te demande si de l'argent réel est utilisé.
+${ctx}
+${hist?'Conversation précédente :\n'+hist+'\n':''}Question du client : ${text}`;
+ try{const sample=await (window.claude&&window.claude.use?window.claude.use('sample'):null);
+  if(!sample)throw new Error('absent');
+  const r=await sample(prompt,{cache:false,modelTier:'quick',onText:({text:t})=>{a.t=t;renderChat();}});a.t=(r&&r.text)||a.t||fallback(text);
+ }catch(err){a.t=fallback(text);}
+ busy=false;renderChat();renderSugs();}
+$('#chatform').addEventListener('submit',e=>{e.preventDefault();const i=$('#chatinput');const t=i.value;i.value='';ask(t);});
+$('#sugs').addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(b)ask(b.dataset.s);});
+
+renderMain();
+})();
+</script>
+
+</body></html>
